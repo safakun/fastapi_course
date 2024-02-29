@@ -39,8 +39,11 @@ pip install uvicorn
 uvicorn main:app --reload
 ```
 
-- **See a Swagger documentation**
+- **See a Swagger and redoc documentation**
 [FastAPI swagger UI](http://localhost:8000/docs).
-- it changes dynamically 
+[FastAPI REDOC documentaion](http://localhost:8000/redoc).
+
+- it changes dynamically  
+
 
 
