@@ -37,6 +37,14 @@ pip install uvicorn
 - Run app
 ```bash
 uvicorn main:app --reload
+
+uvicorn blog.main:app --reload
+``` 
+
+```bash
+pip install -r requirements.txt
+virtualenv blog-env 
+
 ```
 
 - **See a Swagger and redoc documentation**
