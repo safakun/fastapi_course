@@ -39,3 +39,8 @@ pip install uvicorn
 uvicorn main:app --reload
 ```
 
+- **See a Swagger documentation**
+[FastAPI swagger UI](http://localhost:8000/docs).
+- it changes dynamically 
+
+
