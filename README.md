@@ -53,5 +53,23 @@ virtualenv blog-env
 
 - it changes dynamically  
 
+- [Installe TablePlus on Ubuntu](https://tableplus.com/blog/2019/10/tableplus-linux-installation.html)
 
+
+```bash
+# Add TablePlus gpg key
+wget -qO - https://deb.tableplus.com/apt.tableplus.com.gpg.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/tableplus-archive.gpg > /dev/null
+
+# Add TablePlus repo
+sudo add-apt-repository "deb [arch=amd64] https://deb.tableplus.com/debian/22 tableplus main"
+
+# Install
+sudo apt update
+sudo apt install tableplus
+
+```
+
+TODO 
+
+- need to add POSTGRESQL to fastAPi via docker compose 
 
