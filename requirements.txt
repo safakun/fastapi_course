@@ -1,3 +1,8 @@
 fastapi
 uvicorn 
 sqlalchemy
+fastapi-sqlalchemy
+python-dotenv
+psycopg2
+alembic
+pydantic

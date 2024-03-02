@@ -33,7 +33,25 @@ source venv/bin/activate
 
 pip install fastapi
 pip install uvicorn
+
+pip install -r requirements.txt 
+
+sudo apt-get install libpq-dev 
 ``` 
+on Alpine Linux: apk add postgresql-dev 
+
+- For migtations read the following tutorial
+https://www.educative.io/answers/how-to-use-postgresql-database-in-fastapi
+```bash
+
+alembic init alembic
+
+alembic revision --autogenerate -m "New Migration"
+
+alembic upgrade head
+```
+
+
 - Run app
 ```bash
 uvicorn main:app --reload
