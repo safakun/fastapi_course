@@ -25,10 +25,10 @@ async def blog(blog: schemas.Blog):
     db.session.commit()
     return db_book
 
-# @app.get('/book/')
-# async def book():
-#     book = db.session.query(ModelBook).all()
-#     return book
+@app.get('/blog')
+async def blog():
+    blog = db.session.query(models.Blog).all()
+    return blog
 
 
 # @app.post('/blog') 
