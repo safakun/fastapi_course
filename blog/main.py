@@ -22,7 +22,7 @@ app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
 # models.Base.metadata.create_all(engine)
 
 
-@app.post('/blog', response_model=schemas.Blog, status_code=status.HTTP_201_CREATED)
+@app.post('/blog', response_model=schemas.Blog, status_code=status.HTTP_201_CREATED, tags=['blogs'])
 async def blog(blog: schemas.Blog):
     db_blog = models.Blog(title=blog.title, body=blog.body)
     db.session.add(db_blog)
@@ -70,7 +70,7 @@ async def show(id, response: Response):
 
 
 
-@app.post('/user', response_model=schemas.ShowUser)
+@app.post('/user', response_model=schemas.ShowUser, tags=['users'])
 async def create_user(request: schemas.User):
     
     new_user = models.User(name=request.name, email=request.email, password=Hash.bcrypt(request.password))
