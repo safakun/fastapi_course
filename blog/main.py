@@ -1,5 +1,5 @@
 from fastapi import FastAPI, status, Response, HTTPException
-from . import schemas, models
+from . import schemas, models, hashing
 from fastapi_sqlalchemy import DBSessionMiddleware, db
 
 import os
@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from typing import List
 
-from passlib.context import CryptContext
+
 
 load_dotenv('.env')
 
@@ -67,12 +67,12 @@ async def show(id, response: Response):
     return blog
 
 
-pwd_txt = CryptContext(schemes=['bcrypt'], deprecated='auto')
+
 
 @app.post('/user')
 async def create_user(request: schemas.User):
-    hashedPassword = pwd_txt.hash(request.password)
-    new_user = models.User(name=request.name, email=request.email, password=hashedPassword)
+    
+    new_user = models.User(name=request.name, email=request.email, password=hashing.Hash.bcrypt(request.password))
     db.session.add(new_user)
     db.session.commit()
     db.session.refresh(new_user)
