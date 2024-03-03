@@ -29,7 +29,7 @@ async def blog(blog: schemas.Blog):
     db.session.commit()
     return db_blog
 
-@app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
+@app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['blogs'])
 async def destroy(id):
     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
@@ -40,7 +40,7 @@ async def destroy(id):
    
     return {f'Blog {id} was deleted'}
     
-@app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+@app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
 async def update(id, request: schemas.Blog):
     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
@@ -53,12 +53,12 @@ async def update(id, request: schemas.Blog):
 
 
 
-@app.get('/blog', response_model=List[schemas.ShowBlog])
+@app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
 async def blog():
     blogs = db.session.query(models.Blog).all()
     return blogs
 
-@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog)
+@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
 async def show(id, response: Response):
     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
@@ -80,7 +80,7 @@ async def create_user(request: schemas.User):
     return new_user
 
 
-@app.get('/user/{id}', response_model=schemas.ShowUser)
+@app.get('/user/{id}', response_model=schemas.ShowUser, tags=['users'])
 async def get_user(id: int):
     user = db.session.query(models.User).filter(models.User.id == id).first()
     if not user:
