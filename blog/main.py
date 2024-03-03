@@ -5,6 +5,8 @@ from fastapi_sqlalchemy import DBSessionMiddleware, db
 import os
 from dotenv import load_dotenv
 
+from typing import List
+
 load_dotenv('.env')
 
 
@@ -48,12 +50,12 @@ async def update(id, request: schemas.Blog):
 
 
 
-@app.get('/blog')
+@app.get('/blog', response_model=List[schemas.ShowBlog])
 async def blog():
     blogs = db.session.query(models.Blog).all()
     return blogs
 
-@app.get('/blog/{id}', status_code=200)
+@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog)
 async def show(id, response: Response):
     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
@@ -62,6 +64,11 @@ async def show(id, response: Response):
         # return {'detail': f'Blog with id {id} is not available'}
     return blog
 
-# @app.post('/blog') 
-# def create(request: schemas.Blog):
-#     return {'title': request.title, 'body': request.body}
+
+@app.post('/user')
+async def create_user(request: schemas.User):
+    new_user = models.User(name=request.name, email=request.email, password=request.password)
+    db.session.add(new_user)
+    db.session.commit()
+    db.session.refresh(new_user)
+    return new_user
