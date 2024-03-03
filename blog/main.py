@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 
 from typing import List
 
+from passlib.context import CryptContext
+
 load_dotenv('.env')
 
 
@@ -65,9 +67,12 @@ async def show(id, response: Response):
     return blog
 
 
+pwd_txt = CryptContext(schemes=['bcrypt'], deprecated='auto')
+
 @app.post('/user')
 async def create_user(request: schemas.User):
-    new_user = models.User(name=request.name, email=request.email, password=request.password)
+    hashedPassword = pwd_txt.hash(request.password)
+    new_user = models.User(name=request.name, email=request.email, password=hashedPassword)
     db.session.add(new_user)
     db.session.commit()
     db.session.refresh(new_user)
