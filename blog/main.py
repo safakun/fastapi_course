@@ -26,14 +26,25 @@ async def blog(blog: schemas.Blog):
 
 @app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
 async def destroy(id):
-    blog = db.session.query(models.Blog).filter(models.Blog.id == id).delete()
+    blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
+    
+    db.session.delete(blog)
     db.session.commit()
-    # if not blog:
-    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'Blog with id {id} is not available')
-    # db.session.delete(blog)
-    # db.session.commit()
+   
     return {f'Blog {id} was deleted'}
     
+@app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED)
+async def update(id, request: schemas.Blog):
+    blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
+    else:
+        db.session.query(models.Blog).filter(models.Blog.id == id).update(request.dict())
+    
+    db.session.commit()
+    return 'updated'
 
 
 
