@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, Response 
+from fastapi import FastAPI, status, Response, HTTPException
 from . import schemas, models
 from fastapi_sqlalchemy import DBSessionMiddleware, db
 
@@ -33,8 +33,9 @@ async def blog():
 async def show(id, response: Response):
     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
-        response.status_code = status.HTTP_404_NOT_FOUND 
-        return {'detail': f'Blog with id {id} is not available'}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'Blog with id {id} is not available')
+        # response.status_code = status.HTTP_404_NOT_FOUND 
+        # return {'detail': f'Blog with id {id} is not available'}
     return blog
 
 # @app.post('/blog') 
