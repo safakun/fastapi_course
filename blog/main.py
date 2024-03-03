@@ -24,6 +24,19 @@ async def blog(blog: schemas.Blog):
     db.session.commit()
     return db_blog
 
+@app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT)
+async def destroy(id):
+    blog = db.session.query(models.Blog).filter(models.Blog.id == id).delete()
+    db.session.commit()
+    # if not blog:
+    #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'Blog with id {id} is not available')
+    # db.session.delete(blog)
+    # db.session.commit()
+    return {f'Blog {id} was deleted'}
+    
+
+
+
 @app.get('/blog')
 async def blog():
     blogs = db.session.query(models.Blog).all()
