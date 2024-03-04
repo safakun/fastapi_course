@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from typing import List
 from .hashing import Hash
 
+from .routers import blog
 
 
 load_dotenv('.env')
@@ -20,52 +21,57 @@ app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
 
 # creating models
 # models.Base.metadata.create_all(engine)
+app.include_router(blog.router)
 
 
-@app.post('/blog', response_model=schemas.Blog, status_code=status.HTTP_201_CREATED, tags=['blogs'])
-async def blog(blog: schemas.Blog):
-    db_blog = models.Blog(title=blog.title, body=blog.body)
-    db.session.add(db_blog)
-    db.session.commit()
-    return db_blog
 
-@app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['blogs'])
-async def destroy(id):
-    blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
-    if not blog:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
+# @app.post('/blog', response_model=schemas.Blog, status_code=status.HTTP_201_CREATED, tags=['blogs'])
+# async def blog(blog: schemas.Blog):
+#     db_blog = models.Blog(title=blog.title, body=blog.body)
+#     db.session.add(db_blog)
+#     db.session.commit()
+#     return db_blog
+
+# @app.delete('/blog/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['blogs'])
+# async def destroy(id):
+#     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
+#     if not blog:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
     
-    db.session.delete(blog)
-    db.session.commit()
+#     db.session.delete(blog)
+#     db.session.commit()
    
-    return {f'Blog {id} was deleted'}
+#     return {f'Blog {id} was deleted'}
     
-@app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
-async def update(id, request: schemas.Blog):
-    blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
-    if not blog:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
-    else:
-        db.session.query(models.Blog).filter(models.Blog.id == id).update(request.dict())
+# @app.put('/blog/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['blogs'])
+# async def update(id, request: schemas.Blog):
+#     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
+#     if not blog:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'blog with id {id} not found')
+#     else:
+#         db.session.query(models.Blog).filter(models.Blog.id == id).update(request.dict())
     
-    db.session.commit()
-    return 'updated'
+#     db.session.commit()
+#     return 'updated'
+
+
+# imcluding router 
+# app.include_router(blog.router)
+# @app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
+# async def blog():
+#     blogs = db.session.query(models.Blog).all()
+#     return blogs
 
 
 
-@app.get('/blog', response_model=List[schemas.ShowBlog], tags=['blogs'])
-async def blog():
-    blogs = db.session.query(models.Blog).all()
-    return blogs
-
-@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
-async def show(id, response: Response):
-    blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
-    if not blog:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'Blog with id {id} is not available')
-        # response.status_code = status.HTTP_404_NOT_FOUND 
-        # return {'detail': f'Blog with id {id} is not available'}
-    return blog
+# @app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
+# async def show(id, response: Response):
+#     blog = db.session.query(models.Blog).filter(models.Blog.id == id).first()
+#     if not blog:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'Blog with id {id} is not available')
+#         # response.status_code = status.HTTP_404_NOT_FOUND 
+#         # return {'detail': f'Blog with id {id} is not available'}
+#     return blog
 
 
 
