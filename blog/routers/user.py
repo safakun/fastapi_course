@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from .. import schemas, models
 from fastapi_sqlalchemy import DBSessionMiddleware, db 
 from fastapi import FastAPI, status, Response, HTTPException 
-
+from ..hashing import Hash
 
 router = APIRouter() 
 

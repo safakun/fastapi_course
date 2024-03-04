@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from typing import List
 from .hashing import Hash
 
-from .routers import blog
+from .routers import blog, user
 
 
 load_dotenv('.env')
@@ -22,6 +22,7 @@ app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
 # creating models
 # models.Base.metadata.create_all(engine)
 app.include_router(blog.router)
+app.include_router(user.router)
 
 
 
@@ -76,20 +77,20 @@ app.include_router(blog.router)
 
 
 
-@app.post('/user', response_model=schemas.ShowUser, tags=['users'])
-async def create_user(request: schemas.User):
+# @app.post('/user', response_model=schemas.ShowUser, tags=['users'])
+# async def create_user(request: schemas.User):
     
-    new_user = models.User(name=request.name, email=request.email, password=Hash.bcrypt(request.password))
-    db.session.add(new_user)
-    db.session.commit()
-    db.session.refresh(new_user)
-    return new_user
+#     new_user = models.User(name=request.name, email=request.email, password=Hash.bcrypt(request.password))
+#     db.session.add(new_user)
+#     db.session.commit()
+#     db.session.refresh(new_user)
+#     return new_user
 
 
-@app.get('/user/{id}', response_model=schemas.ShowUser, tags=['users'])
-async def get_user(id: int):
-    user = db.session.query(models.User).filter(models.User.id == id).first()
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'User with id {id} is not available')
+# @app.get('/user/{id}', response_model=schemas.ShowUser, tags=['users'])
+# async def get_user(id: int):
+#     user = db.session.query(models.User).filter(models.User.id == id).first()
+#     if not user:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = f'User with id {id} is not available')
     
-    return user
+#     return user
